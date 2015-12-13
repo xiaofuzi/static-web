@@ -1,0 +1,65 @@
+#!/usr/bin/env node
+
+var fs = require('fs'),
+	clc = require('cli-color'),
+	args = process.argv.slice(2),
+	command = args.shift();
+
+var root = __dirname + '/../';
+switch(command){
+	case '-v':
+	case '--version':
+		fs.readFile(root + 'package.json', function(err, data){
+			if(err) throw err;
+			var version = JSON.parse(data).version;
+			console.log(version);
+		});
+	break;
+	case 'server':
+		console.log(root);
+		require('../lib/server')(root);
+	break;
+	case 'deploy':
+	break;
+	case 'init':
+	break;
+	case 'generate':
+	break;
+	default:
+		var maxLen = 0,
+		result = '\nUsage: writer <command>\nOptions:\n';
+
+		var helps = [
+			['-v', '--version', 'Display version'],
+			['help', 'Display help'],
+			['init', 'Initalize'],
+			['server', 'Run server'],
+			['generate', 'Generate web site'],
+			['deploy', 'Deploy']
+		]
+		helps.forEach(function(el){
+			var length = el.length;
+			if(maxLen < length){
+				maxLen = length;
+			}
+		})
+		helps.forEach(function(el){
+			result += '  ' + clc.bold(el[0]);
+			for(var i=1; i<el.length; i++){
+				result += ' ' + el[i];
+			}
+			result += '\n';
+			
+		})
+		console.log(result);
+}
+
+
+
+
+
+
+
+
+
+
